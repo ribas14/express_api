@@ -17,9 +17,7 @@ function validateUsername() {
     .withMessage("required field")
     .not()
     .isEmpty()
-    .withMessage("empty param")
-    .isEmail()
-    .withMessage("Not a valid param");
+    .withMessage("empty param");
 }
 
 function validateAdminRights() {
