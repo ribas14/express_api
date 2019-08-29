@@ -50,7 +50,6 @@ function validatePassword() {
 exports.validateCreationUser = [
   validateEmail(),
   validateUsername(),
-  validatePassword(),
   validateAdminRights()
 ];
 
@@ -59,3 +58,11 @@ exports.validateUpdataUser = [
   validateUsername(),
   validateIdExist()
 ];
+
+exports.validateLogin = [
+  validateEmail(),
+  validateUsername(),
+  validatePassword()
+];
+
+exports.validatePassword = [validatePassword()];
