@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { validateCreationUser } from "../utils/validators";
+import { validateCreationUser, validateUpdataUser } from "../utils/validators";
 
 const bcrypt = require("bcrypt");
 const SALT_ROUNDS = 10;
@@ -14,6 +14,15 @@ router.get("/", async (req, res) => {
 router.get("/:userId", async (req, res) => {
   const user = await req.context.models.User.findByPk(req.params.userId);
   return res.send(user);
+});
+
+router.delete("/:userId", async (req, res) => {
+  const user = await req.context.models.User.destroy({
+    where: {
+      id: req.params.userId
+    }
+  });
+  return res.send("User deleted!");
 });
 
 router.post("/", validateCreationUser, async (req, res) => {
@@ -37,6 +46,30 @@ router.post("/", validateCreationUser, async (req, res) => {
       return res.status(500).send("User already exist!");
     }
   });
+});
+
+router.put("/", validateUpdataUser, async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+  const user = await req.context.models.User.findByPk(req.body.id);
+  if (user) {
+    user
+      .update({
+        username: req.body.username,
+        email: req.body.email,
+        admin: req.body.admin,
+        pic: req.body.pic
+      })
+      .then(function(user) {
+        return res.send(user);
+      })
+      .catch(e => {
+        console.log(e);
+        return res.status(500).send("Something went wrong updating the user!");
+      });
+  }
 });
 
 export default router;

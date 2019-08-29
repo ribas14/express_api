@@ -29,6 +29,15 @@ function validateAdminRights() {
     .withMessage("empty param");
 }
 
+function validateIdExist() {
+  return check("id")
+    .exists()
+    .withMessage("required field")
+    .not()
+    .isEmpty()
+    .withMessage("empty param");
+}
+
 function validatePassword() {
   return check("password")
     .exists()
@@ -43,4 +52,10 @@ exports.validateCreationUser = [
   validateUsername(),
   validatePassword(),
   validateAdminRights()
+];
+
+exports.validateUpdataUser = [
+  validateEmail(),
+  validateUsername(),
+  validateIdExist()
 ];
